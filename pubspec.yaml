@@ -29,8 +29,12 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.3
   lottie:
-  image_picker: ^0.6.0
+  image_picker:
   http: any
+  rx:
+  carousel_slider: ^2.3.1
+  gcayoubpackage:
+      path: C:\Users\pc\AndroidStudioProjects\gcayoubpackage
 
 dev_dependencies:
   flutter_test:

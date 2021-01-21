@@ -1,6 +1,9 @@
+import 'dart:convert';
+
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:gestion/main.dart';
 import 'package:gestion/themes/colors.dart';
-import 'package:lottie/lottie.dart';
 
 class Homepage extends StatefulWidget {
   Homepage({Key key}) : super(key: key);
@@ -10,83 +13,93 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
-  List<Widget> list = [
-    Container(
-      height: 200,
-      width: 200,
-      color: secondcolor,
-      child: Expanded(child: Text("1")),
-    ),
-    Container(
-      height: 200,
-      width: 200,
-      color: globalcolor,
-      child: Text("2"),
-    ),
-    Container(
-      height: 200,
-      width: 200,
-      color: secondcolor,
-      child: Text("3"),
-    )
-  ];
+  List<String> typefood = [];
+  typefoodlist() {
+    for (var item1 in list) {
+      if (!typefood.contains(item1.producttype))
+        typefood.add(item1.producttype);
+    }
+  }
+
+  @override
+  void initState() {
+    typefoodlist();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Container(
-      // child: SafeArea(
-      child: Scaffold(
-          appBar: AppBar(
-            backgroundColor: globalcolor,
-            title: Row(
-              children: [
-                Text("Choose your food"),
-                Spacer(),
-                Icon(Icons.notifications)
-              ],
-            ),
-          ),
-          body: Column(
-            children: [
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Container(
-                  margin: EdgeInsets.only(top: 10, left: 10),
-                  child: Row(
-                    children: [
-                      Column(
-                        children: [
-                          Container(
-                            height: 150,
-                            width: 150,
-                            child: ClipRRect(
-                                borderRadius: BorderRadius.circular(20.0),
-                                child: Image.asset("assets/all.png")),
-                          ),
-                          Text("data")
-                        ],
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                            color: globalcolor,
-                            borderRadius: BorderRadius.circular(50)),
-                        height: 150,
-                        width: 150,
-                        child: Text("data"),
-                      ),
-                      Container(
-                        color: globalcolor,
-                        height: 150,
-                        width: 150,
-                        child: Text("data"),
-                      )
-                    ],
+      child: SafeArea(
+        child: Scaffold(
+            appBar: AppBar(
+              backgroundColor: globalcolor,
+              title: Row(
+                children: [
+                  Icon(
+                    Icons.local_pizza,
+                    color: Colors.amber,
                   ),
+                  Text("PIZZA"),
+                  Spacer(),
+                  Icon(Icons.shopping_cart)
+                ],
+              ),
+            ),
+            body: Column(
+              children: [
+                Stack(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        color: globalcolor,
+                        borderRadius: new BorderRadius.only(
+                            bottomLeft: Radius.elliptical(300, 100),
+                            bottomRight: Radius.elliptical(300, 100)),
+                      ),
+                      height: size.height * 0.4,
+                    ),
+                    Container(
+                      height: 50,
+                      child: ListView.separated(
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index) => Container(
+                                padding: EdgeInsets.only(left: 10, right: 10),
+                                child: FlatButton(
+                                    onPressed: () {},
+                                    child: Text(
+                                      typefood[index].toString(),
+                                      style: TextStyle(
+                                          color: Colors.grey[50],
+                                          fontWeight: FontWeight.w600),
+                                    )),
+                              ),
+                          separatorBuilder: (context, index) => Divider(),
+                          itemCount: typefood.length),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 60),
+                      child: CarouselSlider(
+                        options: CarouselOptions(),
+                        items: list
+                            .map((item) => InkWell(
+                                  onTap: () {
+                                    print(item.foodid);
+                                  },
+                                  child: Container(
+                                    child: Image.memory(
+                                        base64Decode(item.foodimage)),
+                                  ),
+                                ))
+                            .toList(),
+                      ),
+                    ),
+                  ],
                 ),
-              )
-            ],
-          )),
-      //),
+              ],
+            )),
+      ),
     );
   }
 }
